@@ -9,6 +9,7 @@ const Login = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef()
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -20,11 +21,17 @@ const Login = () => {
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
  
+    setIsLoading(true);
+    let url;
     if (isLogin) {
-       } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCTZQtTYs12UMCSLl27RvELtCVu-SK81UQ";
+    } else {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCTZQtTYs12UMCSLl27RvELtCVu-SK81UQ";
+    }
     fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCTZQtTYs12UMCSLl27RvELtCVu-SK81UQ",
-    
+      url,
       {
         method: "POST",
         body: JSON.stringify({
@@ -37,15 +44,25 @@ const Login = () => {
         },
       }
     ).then((res) => {
+      setIsLoading(false);
       if (res.ok) {
-      }else{
-        return res.json().then((data)=>{
-          console.log(data)
-        })
+        return res.json()
+      } else {
+        return res.json().then((data) => {
+          let errorMessage = "Authentication failed!";
+          alert(errorMessage);
+          throw new Error(errorMessage)
+        });
       }
     })
-  }
-  }
+    .then((data)=>{
+      console.log(data)
+    })
+    .catch((err)=>{
+      alert(err.message)
+    })
+  };
+
   
    /*confirm password */
    const [input, setInput] = useState({
@@ -107,7 +124,6 @@ const Login = () => {
     });
   };
   return (
-    <section >
     <Container className="bg-dark  text-uppercase fw-bold border border-4 rounded-5 bg-dark border-info text-center text-warning mt-3">
     <h1 className="bg-dark fw-bold p-1 text-warning border rounded-bottom rounded-4 mt-3 border-5 border-info">
       {isLogin ? "LOGIN" : "SIGN UP"}
@@ -168,23 +184,25 @@ const Login = () => {
           {error.confirmPassword && (
             <span className="err">{error.confirmPassword}</span>
           )}
-       
+          {!isLoading && (
             <Button type="submit" className="px-5 text-uppercase text-dark fw-bold bg-info">
-              {isLogin ? "Login" : "Create account"}
-            </Button>
+            {isLogin ? "Login" : "Create account"}
+          </Button>
+          )}
+          {isLoading && <p>Sending request...</p>}
+           
           
           <Button 
             className="px-2 mx-2 text-uppercase bg-info text-dark fw-bold"
             onClick={switchAuthModeHandler}
           >
-            {isLogin ? "Create new account" : "Login with existing account"}
+          {isLogin ? "Don't have an account ? Sign up" : "Login with existing account"}
           </Button>
+          {isLogin && <Button className="m-2 px-2 bg-danger">Forgot Password</Button>}
         </Form>
       </Col>
     </Row>
   </Container>
-
-    </section>
   );
 };
 
