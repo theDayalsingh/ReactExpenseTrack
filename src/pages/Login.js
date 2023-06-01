@@ -1,13 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { AuthContext } from "../store/auth-context";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef()
+  const navigate = useNavigate();
+const authCtx=useContext(AuthContext)
+
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,7 +61,9 @@ const Login = () => {
       }
     })
     .then((data)=>{
-      console.log(data)
+     authCtx.login(data.idToken)
+     navigate("/logindirect")
+
     })
     .catch((err)=>{
       alert(err.message)
@@ -129,13 +136,13 @@ const Login = () => {
       {isLogin ? "LOGIN" : "SIGN UP"}
     </h1>
     <Row>
-      <Col xs={6}>
+      <Col>
         <img
           className="m-3 rounded-4 border border-5  "
           src="https://images.pexels.com/photos/459653/pexels-photo-459653.jpeg?auto=compress&cs=tinysrgb&w=600"
         />
       </Col>
-      <Col xs={6} className="p-5">
+      <Col className="p-5">
         <Form onSubmit={submitHandler }>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>

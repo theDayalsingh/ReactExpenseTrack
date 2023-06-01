@@ -1,9 +1,14 @@
-import React from 'react';
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Button from "react-bootstrap/Button";
+import { AuthContext } from '../store/auth-context';
 
 const NavbarHeader = () => {
+  const authCtx=useContext(AuthContext)
+  const isLoggedIn=authCtx.isLoggedIn
+
   return (
     <Navbar bg="light" expand="lg">
     <Container fluid>
@@ -20,8 +25,12 @@ const NavbarHeader = () => {
                     <Nav.Link href="#" >
             Link
           </Nav.Link>
-        </Nav>
-        <Nav.Link href="/login">LOGIN</Nav.Link>
+          </Nav>
+          <Nav>        
+            {!isLoggedIn && (<li><Nav.Link href="/login">LOGIN</Nav.Link></li>)}      
+            {isLoggedIn && (<li><Nav.Link href='/profile'>Profile</Nav.Link></li>)}
+            {isLoggedIn &&(<li><Button variant='info'>Logout</Button></li>)}       
+          </Nav>
       </Navbar.Collapse>
     </Container>
   </Navbar>

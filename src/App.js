@@ -2,7 +2,8 @@ import React from 'react';
 import NavbarHeader from './components/NavbarHeader';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Home from './pages/Home'
+import UserProfile from './pages/Profile/UserProfile'
+import Logindirect from './pages/Logindirect';
 
 const App = () => {
   return (
@@ -10,7 +11,8 @@ const App = () => {
     <NavbarHeader/>
     <Routes>
     <Route path='/login' element={<Login/>}/>
-    <Route path='/home' element={<Home/>}/>
+    <Route path='/profile' element={<UserProfile/>}/>
+    <Route path='/logindirect' element={<Logindirect/>}/>
     </Routes>
     </Router>
   )
