@@ -62,7 +62,7 @@ const authCtx=useContext(AuthContext)
     })
     .then((data)=>{
      authCtx.login(data.idToken)
-     navigate("/logindirect")
+     navigate("/home")
 
     })
     .catch((err)=>{
